@@ -1,4 +1,12 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  MinLength,
+} from 'class-validator';
+
+import { RoleType } from '../entities/Auth';
 
 export class SignupDto {
   @IsString()
@@ -14,4 +22,8 @@ export class SignupDto {
   @IsNotEmpty()
   @MinLength(8)
   password: string;
+
+  @IsNotEmpty()
+  @IsEnum(RoleType)
+  role: RoleType;
 }

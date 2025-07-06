@@ -39,7 +39,7 @@ export class AuthService {
   }
 
   async signup(signupDto: SignupDto) {
-    const { name, email, password } = signupDto;
+    const { name, email, password, role } = signupDto;
 
     const emailTaken = await this.usersRepo.findUnique({
       where: { email },
@@ -57,7 +57,7 @@ export class AuthService {
         name,
         email,
         password: hashedPassword,
-        role: 'USER',
+        role,
       },
     });
 
