@@ -12,6 +12,9 @@ export class CourtsService {
   ) {}
 
   async create(userId: string, createCourtDto: CreateCourtDto) {
+    const { city, country, neighborhood, number, state, street, complement } =
+      createCourtDto.address;
+
     const court = await this.courtsRepo.create({
       data: {
         name: createCourtDto.name,
@@ -19,6 +22,17 @@ export class CourtsService {
         imageUrl: createCourtDto.imageUrl,
         linkToGoogleMaps: createCourtDto.linkToGoogleMaps,
         userId: userId,
+        courtAddress: {
+          create: {
+            city,
+            country,
+            neighborhood,
+            number,
+            state,
+            street,
+            complement,
+          },
+        },
       },
     });
 
@@ -28,12 +42,14 @@ export class CourtsService {
   findAllByUserId(userId: string) {
     return this.courtsRepo.findMany({
       where: { userId },
+      include: { courtAddress: true },
     });
   }
 
   findOne(userId: string, courtId: string) {
     return this.courtsRepo.findUnique({
       where: { id: courtId, userId },
+      include: { courtAddress: true },
     });
   }
 
@@ -47,6 +63,8 @@ export class CourtsService {
       courtId,
     });
 
+    const { address } = updateCourtDto;
+
     return this.courtsRepo.update({
       where: { id: courtId },
       data: {
@@ -54,7 +72,19 @@ export class CourtsService {
         description: updateCourtDto.description,
         imageUrl: updateCourtDto.imageUrl,
         linkToGoogleMaps: updateCourtDto.linkToGoogleMaps,
+        courtAddress: {
+          update: {
+            city: address?.city,
+            complement: address?.complement,
+            country: address?.country,
+            neighborhood: address?.neighborhood,
+            number: address?.number,
+            state: address?.state,
+            street: address?.street,
+          },
+        },
       },
+      include: { courtAddress: true },
     });
   }
 

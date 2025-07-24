@@ -1,4 +1,15 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateCourtDto } from './create-court.dto';
+import { OmitType, PartialType } from '@nestjs/mapped-types';
+import { Type } from 'class-transformer';
+import { IsOptional, ValidateNested } from 'class-validator';
+import { CourtAddress, CreateCourtDto } from './create-court.dto';
 
-export class UpdateCourtDto extends PartialType(CreateCourtDto) {}
+class PartialUpdateCourtDto extends PartialType(CourtAddress) {}
+
+export class UpdateCourtDto extends PartialType(
+  OmitType(CreateCourtDto, ['address'] as const),
+) {
+  @ValidateNested()
+  @Type(() => PartialUpdateCourtDto)
+  @IsOptional()
+  address?: PartialUpdateCourtDto;
+}

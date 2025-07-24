@@ -33,6 +33,22 @@ model User {
   @@map("users")
 }
 
+model CourtAddress {
+  id           String  @id @default(uuid()) @db.Uuid
+  courtId      String  @unique @map("court_id") @db.Uuid
+  country      String  @map("country")
+  state        String  @map("state")
+  city         String  @map("city")
+  neighborhood String  @map("neighborhood")
+  street       String  @map("street")
+  number       Int     @map("number")
+  complement   String? @map("complement")
+
+  court Court @relation(fields: [courtId], references: [id], onDelete: Cascade)
+
+  @@map("courts_addresses")
+}
+
 model Court {
   id               String  @id @default(uuid()) @db.Uuid
   userId           String  @map("user_id") @db.Uuid
@@ -41,7 +57,8 @@ model Court {
   imageUrl         String?
   linkToGoogleMaps String? @map("link_to_google_maps")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courtAddress CourtAddress?
 
   @@map("courts")
 }
