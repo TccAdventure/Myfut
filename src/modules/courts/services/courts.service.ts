@@ -14,6 +14,7 @@ export class CourtsService {
   async create(userId: string, createCourtDto: CreateCourtDto) {
     const { city, country, neighborhood, number, state, street, complement } =
       createCourtDto.address;
+    const courtAvailabilities = createCourtDto.availabilities;
 
     const court = await this.courtsRepo.create({
       data: {
@@ -33,6 +34,11 @@ export class CourtsService {
             complement,
           },
         },
+        courtAvailability: {
+          createMany: {
+            data: courtAvailabilities,
+          },
+        },
       },
     });
 
@@ -42,14 +48,13 @@ export class CourtsService {
   findAllByUserId(userId: string) {
     return this.courtsRepo.findMany({
       where: { userId },
-      include: { courtAddress: true },
     });
   }
 
   findOne(userId: string, courtId: string) {
     return this.courtsRepo.findUnique({
       where: { id: courtId, userId },
-      include: { courtAddress: true },
+      include: { courtAddress: true, courtAvailability: true },
     });
   }
 

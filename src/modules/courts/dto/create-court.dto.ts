@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import {
+  IsArray,
   IsNotEmpty,
   IsNumber,
   IsObject,
@@ -38,6 +39,20 @@ export class CourtAddress {
   complement?: string;
 }
 
+export class CourtAvailability {
+  @IsNumber()
+  @IsNotEmpty()
+  weekday: number;
+
+  @IsString()
+  @IsNotEmpty()
+  startTime: string;
+
+  @IsString()
+  @IsNotEmpty()
+  endTime: string;
+}
+
 export class CreateCourtDto {
   @IsString()
   @IsNotEmpty()
@@ -60,4 +75,10 @@ export class CreateCourtDto {
   @ValidateNested()
   @Type(() => CourtAddress)
   address: CourtAddress;
+
+  @IsArray()
+  @IsNotEmpty()
+  @ValidateNested()
+  @Type(() => CourtAvailability)
+  availabilities: CourtAvailability[];
 }
