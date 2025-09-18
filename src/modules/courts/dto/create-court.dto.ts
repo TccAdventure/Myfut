@@ -1,6 +1,7 @@
 import { Type } from 'class-transformer';
 import {
   IsArray,
+  IsBoolean,
   IsNotEmpty,
   IsNumber,
   IsObject,
@@ -51,6 +52,10 @@ export class CourtAvailability {
   @IsString()
   @IsNotEmpty()
   endTime: string;
+
+  @IsBoolean()
+  @IsNotEmpty()
+  isActive: boolean;
 }
 
 export class CreateCourtDto {

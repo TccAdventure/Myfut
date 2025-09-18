@@ -65,11 +65,12 @@ model Court {
 }
 
 model CourtAvailability {
-  id        String @id @default(uuid()) @db.Uuid
-  courtId   String @map("court_id") @db.Uuid
+  id        String  @id @default(uuid()) @db.Uuid
+  courtId   String  @map("court_id") @db.Uuid
   weekday   Int
   startTime String
   endTime   String
+  isActive  Boolean
 
   court Court @relation(fields: [courtId], references: [id], onDelete: Cascade)
 
